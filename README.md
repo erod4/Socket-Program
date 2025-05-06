@@ -49,3 +49,7 @@ https://erod4.github.io/Socket-Program/
 2. No Man-in-the-Middle Attacks: This implementation assumed that there are no attacks occurring during key exchange. In a real-world scenario, you would have to incorporate additional mechanisms (certificate verification or Diffie-Hellman key exchange) to prevent MITM attacks.
 
 3. Secure Key Storage: We presume that the private keys are securely stored and are not accessible to unauthorized individuals.
+
+## Architecture
+
+![SecureChatUDP Sequence Diagram](sequence-diagram.png)
