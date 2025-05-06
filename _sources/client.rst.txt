@@ -1,0 +1,7 @@
+Client Module
+=============
+
+.. automodule:: Client
+   :members:
+   :undoc-members:
+   :show-inheritance:
