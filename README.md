@@ -50,6 +50,25 @@ https://erod4.github.io/Socket-Program/
 
 3. Secure Key Storage: We presume that the private keys are securely stored and are not accessible to unauthorized individuals.
 
+## Message Format
+
+All messages in this application use a simple ASCII‐prefix + Base64‐payload framing:
+
+| Field       | Format / Size                              | Description                                                                                                                                                                                                        |
+| ----------- | ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Command** | ASCII identifier + colon (6–7 bytes + `:`) | One of:<br>• `PUBKEY:` — client → server (sends RSA public key)<br>• `AESKEY:` — server → client (sends encrypted AES key)<br>• `ENCMSG:` — client ↔ server (encrypted chat blob)                                  |
+| **Payload** | Variable (Base64‐encoded)                  | Raw bytes depending on Command:<br>• after `PUBKEY:`: PEM-format RSA public key<br>• after `AESKEY:`: RSA-OAEP(encrypted 32 B AES key)<br>• after `ENCMSG:`: AES-GCM blob (`nonce 12 B` + ciphertext + `tag 16 B`) |
+
+---
+
+### `ENCMSG` payload (before Base64)
+
+| Subfield       | Size     | Description                               |
+| -------------- | -------- | ----------------------------------------- |
+| **Nonce**      | 12 bytes | Random AES-GCM nonce                      |
+| **Ciphertext** | Variable | AES-GCM encryption of `username: message` |
+| **Tag**        | 16 bytes | GCM authentication tag                    |
+
 ## Architecture
 
 ![SecureChatUDP Sequence Diagram](sequence-diagram.png)
